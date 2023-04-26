@@ -1,0 +1,59 @@
+\section{Reinforcement Learning Algorithms}
+Dynamic programming (DP) algorithms are based on the assumption that we have access to a model of the Markov Decision Process (MDP) environment, which includes transition states defined by $\mathcal{S}$ and the probabilities of the next state and reward given the current state and action. \footnote{By model we mean the transition states define by $\SP$, probabilities of next state and reward, given current state and reward}.
+However, in real-world scenarios, we often lack access to an MDP model. Instead, the agent must interact with the actual MDP environment to learn about it. Interacting with the environment doesn't provide transition probabilities; it simply presents a new state and reward when an action is taken in a specific state. The environment supplies individual experiences of the next state and reward, rather than the explicit probabilities of occurrence for the next states and rewards. This raises a pertinent question: is it possible to compute the optimal value function or optimal policy without access to a model?
+
+
+\subsection{Temporal difference learning}
+The Temporal-Difference (TD) learning method is prevalently employed in reinforcement learning applications. TD leverages a hybrid approach that combines Monte Carlo's model-free experience-based value estimation with the benefits of dynamic programming's capability to calculate values utilizing present estimates alone \cite{sutton1988b}. 
+\begin{equation}
+    V(S_t) \leftarrow V(S_t) + \alpha(R_{t+1} + \gamma \cdot V(S_{t+1} - V(S_t))
+\end{equation}
+\begin{itemize}
+    \item We refer to $R_{t+1} + \gamma \cdot V(S_{t+1})$ as the \textbf{TD target}
+    \item We refer to $\delta_{t} = R_{t+1} + \gamma \cdot V(S_{t+1}) - V(S_{t})$ as  \textbf{TD error}
+\end{itemize}
+The TD target is a (biased) estimate of $G_t$ \cite{RL}. The TD control algorithm can update the Q-value function after each time step. 
+
+
+
+\subsection{Q-learning}
+One of the most well-known and widely used model-free RL methods is Q-learning, which was proposed by proposed by Watkins (1989) \cite{watkins1989}, and has been instrumental in solving various decision-making problems. 
+
+ Q-learning is an off-policy reinforcement learning algorithms allows the agent learn an optimal policy without relying on a complete model of the environment (Watkins \& Dayan, 1992). The goal of the Q-learning algorithm is to seek Q-function (our case table of state-action pairs) which represents the expected cumulative reward for taking a particular action in a given state and following the optimal policy thereafter. The agent starts with an initial Q-table and iteratively updates its Q-values based on the observed reward and the next state values.
+The update rule for Q-learning is given by \cite{watkins1992}:
+\begin{equation}
+    Q(S_t,A_t) \leftarrow
+    Q(S_t,A_t) + \alpha
+    \left [
+    R_{t+1} + \gamma \underset{a}{\text{max}}
+    Q(S_{t+1},a) - Q(S_t, A_t)
+    \right]
+\end{equation}
+Its important note that the optimal policy ($\pi^*$) or optimal value function ($V^*$) can be directly obtain from $Q*$ by the following computations: $\pi^*(s) = \underset{a \in \SA}{\text{argmax }} Q^*(s,a)$ and $V^*(s) = \underset{a \in \SA}{\text{max }} Q^*(s,a)$.
+
+\begin{algorithm}
+\caption{Q-learning Algorithm}\label{Q-learning}
+\begin{algorithmic}
+\Require a step size  $\alpha \in [0,1]$, and $\epsilon \in [0,1]$ ($\epsilon$ is generally chosen to be a very small value)
+\Ensure $Q(s,a)$ for all $s \in \cS, a \in \SA(s)$ is initialized
+\For {each episode}
+\State Initialize $S$
+\For {each step of episode:} 
+    \State Choose action $a \in \SA(s)$, given state $s \in \cS$, using policy $\pi$ derived from $Q(s,a)$ 
+    \State ($\epsilon-$ greedy)
+    \State Take action  $a$, and observe $r$ and $s'$
+    \State $Q(s,a) \leftarrow
+    Q(s,a) + \alpha
+    \left [
+    r + \gamma \underset{a'}{\text{max}}
+    Q(s',a') - Q(s, a)
+    \right]$
+    \State \textbf{Update State:} $s \leftarrow s'$
+    \EndFor \Comment{Until $s$ is terminal state} \\
+    \textbf{Return:} $Q$ table 
+\end{algorithmic}
+\end{algorithm}
+The pseudo code above adapted from Sutton \& Barto (2018) \cite{RL} and Mohri et al. (2018) \cite{mohri2018}.
+
+Note that we are taking advantage of the recursive structure of the Value Function as given by the Bellman Equation; we only have access to individual experiences of next state $S_{t+1}$ and reward $R_{t+1}$, and not the transition probabilities of next state and  reward, and we are approximating $G_t$ by $R_{t+1} + \gamma V(S_{t+1})$. 
+In recent years, due to the rise of deep neural networks, Q-learning has been successfully applied in a diverse set of domains, showcasing its versatility and adaptability. 

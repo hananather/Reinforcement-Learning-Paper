@@ -15,9 +15,15 @@ The distinction between ``on-policy" and ``off-policy" methods lies in the relat
 
 \begin{itemize}
     \item \textbf{On-policy methods:} 
-    These are the methods where the policy that's being improved upon is the same policy that's used to make decisions during interaction with the environment. In other words, the agent learns about and improves the policy that it is currently following. SARSA is a common example of an on policy method.
+    These are the methods where the policy that's being improved upon is the same policy that's used to make decisions during interaction with the environment. In other words, the agent learns about and improves the policy that it is currently following. SARSA is a common example of an on policy method. For exploration, it might use an $\eps-$greedy strategy, but the important part is that the policy it learns about ($Q-$values it updates) is based on the same $\eps-$greedy strategy. 
+
+    \item \textbf{Off-policy methods:} 
+    These are methods where the policy that's being improved is different from the policy that's used to make decisions during interaction with the environment.
+    The agent follows one policy (the behaviour policy), while learning about a different one (target policy). 
+    For example, Q-learning is an off-policy method. The agent can use any exploratory strategy (like $\eps-$greedy), but the Q-values it learns are based on the assumption of a greedy policy (always choosing the action with the highest Q-value). 
 \end{itemize}
- 
+ The benefit of off-policy methods is that they allow you to learn an optimal policy while following exploratory policy for better learning. In contrast, on-policy methods might converge faster because they are always learning about the policy they are following, but they need to balance exploration and exploitation with the policy they are learning about. 
+
 
 \subsection{Temporal difference learning}
 

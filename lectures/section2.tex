@@ -1,10 +1,28 @@
-\section{Reinforcement Learning Algorithms}
-Dynamic programming (DP) algorithms are based on the assumption that we have access to a model of the Markov Decision Process (MDP) environment, which includes transition states defined by $\mathcal{S}$ and the probabilities of the next state and reward given the current state and action. \footnote{By model we mean the transition states define by $\SP$, probabilities of next state and reward, given current state and reward}.
-However, in real-world scenarios, we often lack access to an MDP model. Instead, the agent must interact with the actual MDP environment to learn about it. Interacting with the environment doesn't provide transition probabilities; it simply presents a new state and reward when an action is taken in a specific state. The environment supplies individual experiences of the next state and reward, rather than the explicit probabilities of occurrence for the next states and rewards. This raises a pertinent question: is it possible to compute the optimal value function or optimal policy without access to a model?
+\section{Reinforcement Learning Algorithms}\label{Algo}
+Thus far we have been under the assumption that we have access to a model of the Markov Decision Process (MDP) environment, which includes transition states defined by $\mathcal{S}$ and the probabilities of the next state and reward given the current state and action\footnote{By model we mean the transition states define by $\SP$, probabilities of next state and reward, given current state and reward}.
+However, in real-world scenarios, we often lack access to an MDP model. 
+When we don't have a model, we don't have access to the environment's dynamics such as transition probabilities, $\PP(S_{t+1} \mid S_t , A_t)$, or rewards functions $r(s_{t+1}, a_t, s_t)$ . Consequently, we cannot predict the next state and the immediate reward you will receive when taking a specific action in a given state. 
+Instead, the agent must interact with the actual MDP environment to learn about it. Interacting with the environment doesn't provide transition probabilities; it simply presents a new state and reward when an action is taken in a specific state. The environment supplies individual experiences of the next state and reward, rather than the explicit probabilities of occurrence for the next states and rewards. This raises a pertinent question: is it possible to compute the optimal value function or optimal policy without access to a model?
 
+\subsection{Model-based and Model-free learning}
+In RL literature, there are primarily two approaches:  Model-based and Model-free learning \cite{RL3}. In model-based learning approaches, the agent first learn a model of the environment before proceeding to learn a policy \cite{RL2}. In this approach, the agent creates an internal model of the environment, including its rules and dynamics. Once this model is established, the agent then uses it as a guide to learn and refine an  policy. This approach can be more computationally demanding, but it often leads to a more robust and flexible policy, because the agent can use its understanding of the environment to plan and adapt its actions to different situations \cite{RL}.
+Model-free approach, involves directly acquiring an action policy without necessarily understanding the underlying dynamics of the environment. The learning agent learns the environment based on the rewards it receives, without developing a comprehensive understanding of how the environment actually works \cite{RL3}. The Q-learning algorithm  discussed in the next section belongs to the group of model-free methods.
+
+
+
+\subsection{On-policy and Off-Policy Methods}
+The distinction between ``on-policy" and ``off-policy" methods lies in the relationship between the policy that the agent follows while exploring the environment (behaviour policy) and the policy that it learns about (target policy). 
+
+\begin{itemize}
+    \item \textbf{On-policy methods:} 
+    These are the methods where the policy that's being improved upon is the same policy that's used to make decisions during interaction with the environment. In other words, the agent learns about and improves the policy that it is currently following. SARSA is a common example of an on policy method.
+\end{itemize}
+ 
 
 \subsection{Temporal difference learning}
-The Temporal-Difference (TD) learning method is prevalently employed in reinforcement learning applications. TD leverages a hybrid approach that combines Monte Carlo's model-free experience-based value estimation with the benefits of dynamic programming's capability to calculate values utilizing present estimates alone \cite{sutton1988b}. 
+
+The Temporal-Difference (TD) learning method is prevalently employed in reinforcement learning applications \cite{RL3}.. TD learning is a method for estimating the expected cumulative future reward, or ``value," of each state in an environment. This value is updated at each time increment based on the difference between the predicted value of a state and the observed value after taking an action and transitioning to a new state \cite{RL}, \cite{RL2}.
+TD learning leverages a hybrid approach that combines Monte Carlo's model-free experience-based value estimation with the benefits of dynamic programming's capability to calculate values utilizing present estimates alone \cite{sutton1988b}. 
 \begin{equation}
     V(S_t) \leftarrow V(S_t) + \alpha(R_{t+1} + \gamma \cdot V(S_{t+1} - V(S_t))
 \end{equation}
@@ -17,9 +35,9 @@ The TD target is a (biased) estimate of $G_t$ \cite{RL}. The TD control algorith
 
 
 \subsection{Q-learning}
-One of the most well-known and widely used model-free RL methods is Q-learning, which was proposed by proposed by Watkins (1989) \cite{watkins1989}, and has been instrumental in solving various decision-making problems. 
-
- Q-learning is an off-policy reinforcement learning algorithms allows the agent learn an optimal policy without relying on a complete model of the environment (Watkins \& Dayan, 1992). The goal of the Q-learning algorithm is to seek Q-function (our case table of state-action pairs) which represents the expected cumulative reward for taking a particular action in a given state and following the optimal policy thereafter. The agent starts with an initial Q-table and iteratively updates its Q-values based on the observed reward and the next state values.
+One of the most well-known and widely used model-free RL methods is Q-learning, which was proposed by proposed by Watkins (1989) \cite{watkins1989}, and has been instrumental in solving various decision-making problems. One of the most renowned applications of Q-learning is in the use of a more advanced version called Double Q-learning, a modification of the Deep Q-Network (DQN). This method was employed to train agents to play 49 games on the Atari 2600 system \cite{van2016double}.
+Q-learning is a specific implementation of TD learning that seeks to learn the value of taking a particular action in a particular state, also known as the Q-value \cite{RL}. These Q-values are stored in a table and updated using a similar temporal difference method. The Q-learning algorithm is model-free, meaning it doesn't require knowledge of the underlying environment model. Instead, it learns from direct interaction with the environment.
+The goal of the Q-learning algorithm is to seek Q-function (our case table of state-action pairs) which represents the expected cumulative reward for taking a particular action in a given state and following the optimal policy thereafter. The agent starts with an initial Q-table and iteratively updates its Q-values based on the observed reward and the next state values.
 The update rule for Q-learning is given by \cite{watkins1992}:
 \begin{equation}
     Q(S_t,A_t) \leftarrow
@@ -29,7 +47,7 @@ The update rule for Q-learning is given by \cite{watkins1992}:
     Q(S_{t+1},a) - Q(S_t, A_t)
     \right]
 \end{equation}
-Its important note that the optimal policy ($\pi^*$) or optimal value function ($V^*$) can be directly obtain from $Q*$ by the following computations: $\pi^*(s) = \underset{a \in \SA}{\text{argmax }} Q^*(s,a)$ and $V^*(s) = \underset{a \in \SA}{\text{max }} Q^*(s,a)$.
+Its important to note that the optimal policy ($\pi^*$) or optimal value function ($V^*$) can be directly obtain from $Q*$ by the following computations: $\pi^*(s) = \underset{a \in \SA}{\text{argmax }} Q^*(s,a)$ and $V^*(s) = \underset{a \in \SA}{\text{max }} Q^*(s,a)$.
 
 \begin{algorithm}
 \caption{Q-learning Algorithm}\label{Q-learning}
@@ -54,6 +72,5 @@ Its important note that the optimal policy ($\pi^*$) or optimal value function (
 \end{algorithmic}
 \end{algorithm}
 The pseudo code above adapted from Sutton \& Barto (2018) \cite{RL} and Mohri et al. (2018) \cite{mohri2018}.
-
 Note that we are taking advantage of the recursive structure of the Value Function as given by the Bellman Equation; we only have access to individual experiences of next state $S_{t+1}$ and reward $R_{t+1}$, and not the transition probabilities of next state and  reward, and we are approximating $G_t$ by $R_{t+1} + \gamma V(S_{t+1})$. 
 In recent years, due to the rise of deep neural networks, Q-learning has been successfully applied in a diverse set of domains, showcasing its versatility and adaptability. 

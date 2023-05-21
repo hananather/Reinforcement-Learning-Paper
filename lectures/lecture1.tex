@@ -1,8 +1,8 @@
 \section{Introduction}
 \subsection{What is Reinforcement Learning?}
-Reinforcement learning is a subfield of artificial intelligence that centers around an agent learning to make optimal decisions by interacting with its environment, receiving feedback in the form of rewards or penalties, and adjusting its behavior accordingly to maximize cumulative rewards over time \cite{RL}. In this process, the agent gathers information through actions and interactions with the environment, with its performance evaluated by the rewards it receives, which it ultimately aims to maximize.
+Reinforcement Learning (RL) is a subfield of artificial intelligence that centers around an agent learning to make optimal decisions by interacting with its environment, receiving feedback in the form of rewards or penalties, and adjusting its behavior accordingly to maximize cumulative rewards over time \cite{RL}. In this process, the agent gathers information through actions and interactions with the environment, with its performance evaluated by the rewards it receives, which it ultimately aims to maximize.
 
-Upon taking an action, the agent obtains two pieces of information: its present state within the environment and a real-valued reward. The agent's goal is to maximize its reward, thereby determining the most effective sequence of actions, or policy, to accomplish its objective. However, the information it acquires from the environment pertains solely to the immediate reward associated with the actions just executed.
+Upon taking an action, the agent obtains two pieces of information: its present state within the environment and a real-valued reward \cite{RL2}. The agent's goal is to maximize its reward, thereby determining the most effective sequence of actions, or policy, to accomplish its objective. 
 \begin{figure}
     \centering
     \tikzstyle{block} = [rectangle, draw, fill=blue!20,
@@ -18,24 +18,24 @@ Upon taking an action, the agent obtains two pieces of information: its present 
         \path [line] (Environment.190) --++ (-6em,0em) |- node [near start] {New state  $s_{t+1}$} (Agent.170);
         \path [line] (Environment.170) --++ (-4.25em,0em) |- node [near start, right] {Reward $r_{t+1}$} (Agent.190);
     \end{tikzpicture}
-    \caption{The MDP Framework: As illustrated in the figure, the agent, which represents an AI algorithm, and the environment, an abstract entity delivering uncertain outcomes, engage in a time-sequenced, iterative interaction.}
+    \caption{The MDP Framework: As illustrated in the figure, the agent, which represents an AI algorithm, and the environment, an abstract entity delivering uncertain outcomes, engage in a time-sequenced, iterative interaction. Credit: Adapted from Sutton \& Barto, 2018 \cite{RL} }
     \label{fig:my_label}
 \end{figure}
 
 
-\subsection{Supervised, Unsupervised, \& Reinforcement Learning}
-In contrast to supervised learning, where the learner trains passively using labeled data, reinforcement learning involves active engagement with the environment, and the policy chosen defines the distribution over observations rather than relying on a fixed distribution \cite{jordan2015}. Minor alterations to the policy can significantly impact the rewards obtained, highlighting the dynamic nature of reinforcement learning. Additionally, the environment may not remain constant and could change due to the actions selected by the agent. Reinforcement learning also differs from supervised learning in that training and testing phases are intertwined, rather than being separate stages of the process. 
-Unlike other branches of machine learning, such as supervised and unsupervised learning, reinforcement learning embodies a more ambitious approach. It not only extracts patterns and properties from the given data, but also discerns suitable behaviors and decisions to progress towards the desired optimization objective. One could argue that supervised and unsupervised learning primarily concentrate on "minimization," as they strive to minimize the fitting error of a model to the provided data. Conversely, reinforcement learning focuses on "maximization," seeking to identify the most appropriate decisions that contribute to the maximization of a well-defined objective.
+\subsection{Supervised, Unsupervised, and Reinforcement Learning}
+In contrast to supervised learning, where the learner trains passively using labeled data, reinforcement learning involves active engagement with the environment, and the policy chosen defines the distribution over observations rather than relying on a fixed distribution \cite{jordan2015}. Minor alterations to the policy can significantly impact the rewards obtained, highlighting the dynamic nature of reinforcement learning. Additionally, the environment may not remain constant and could change due to the actions selected by the agent \cite{buehler2019}. Reinforcement learning also differs from supervised learning in that training and testing phases are intertwined, rather than being separate stages of the process \cite{RL2}. 
+Unlike other branches of machine learning, such as supervised and unsupervised learning, reinforcement learning embodies a more ambitious approach. It not only extracts patterns and properties from the given data, but also discerns suitable behaviors and decisions to progress towards the desired optimization objective \cite{RL}. One could argue that supervised and unsupervised learning primarily concentrate on ``minimization," as they strive to minimize the fitting error of a model to the provided data. Conversely, reinforcement learning focuses on ``maximization," seeking to identify the most appropriate decisions that contribute to the maximization of a well-defined objective.
 
-In reinforcement learning, the agent confronts a dilemma between exploring unfamiliar states and actions to gather more information about the environment and rewards, and exploiting the existing information to optimize its reward. This challenge, known as the exploration versus exploitation trade-off, is a fundamental aspect of the reinforcement learning process.
+In reinforcement learning, the agent confronts a dilemma between exploring unfamiliar states and actions to gather more information about the environment and rewards, and exploiting the existing information to optimize its reward. This challenge, known as the exploration versus exploitation trade-off \cite{RL2}, is a fundamental aspect of the reinforcement learning process.
 
-\section{Basic Components of RL}
+\section{Basic Components of Reinforcement Learning}
 \subsection{Markov Decision Process}
-A Markov decision process (MDP) is a mathematical framework used in reinforcement learning to model decision-making in situations where an agent interacts with an environment that has probabilistic state transitions and rewards \cite{Markov}. 
+A Markov Decision Process (MDP) is a mathematical framework used in reinforcement learning to model decision-making in situations where an agent interacts with an environment that has probabilistic state transitions and rewards \cite{Markov}. 
 
 The motivation for using MDPs in reinforcement learning is to provide a structured representation of the problem, facilitating the development of algorithms that enable agents to find optimal policies for maximizing cumulative rewards over time \cite{RL2}.
 \begin{definition}[Markov Decision Process]
-    A \vocab{Markov decision process} (MDP) is defined by 4-tuple ($\cS$, $\SA$, $\SP_a$, $\SR$):
+    MDP is defined by 4-tuple ($\cS$, $\SA$, $\SP_a$, $\SR$):
     \begin{enumerate}
         \item a set of states $\cS$, possibly infinite
         \item a set of actions $\SA$, possibly infinite
@@ -71,14 +71,19 @@ For a given state $s \in S$ and action $a \in A$, the policy is defined as \cite
     A policy is a mapping $\pi: S \to \Delta(A),$ where $\Delta(A)$ is the set of probability distributions over the action space $A$. A policy is deterministic if for any $s \in S$, there exists a unique $a \in A$ such that $\pi(a|s) = 1$. In this case, we can identify $\pi: S \to A$.
     \footnote{The given definition pertains to a stationary policy, as the action distribution does not rely on time. Generally, a non-stationary policy can be characterized as a sequence of mappings $\pi_t : S \rightarrow \Delta(A)$, indexed by $t$. Notably, in scenarios with a finite horizon, employing a non-stationary policy is often essential for reward optimization}
 \end{definition}
-The objective in RL is learn a policy, more precisely, the agent's objective is to find a policy that \textit{maximizes its expected (reward) return}. The discounted return is defined as \cite{RL}:
+The objective in RL is to learn a policy, more precisely, the agent's objective is to find a policy that \textit{maximizes its expected (reward) return}. The discounted return is defined as \cite{RL}:
 \begin{equation}
     G_t = R_{t+1} + \gamma R_{t+2 } + \gamma^2 R_{t+3 } + \cdots = \gamma^k \sum_{k=0}^{\infty} R_{t+k+1}
 \end{equation}
-Where $\gamma \in [0,1]$ is the \textit{discount-factor} \footnote{ The discount factor $\gamma$ serves to model scenarios in which a future reward is considered less desirable than an immediate reward of the same magnitude.}
-The return is a scalar-value that essentially summarizes a (possibly) an infinite sequence of immediate rewards. 
-An important fact to note is that even though this is an infinite sum, if $\gamma < 1$, $G_t$ will be finite. If we set the value of $\gamma$ to $0$, the agent will only consider immediate reward, and future rewards will be of no consequence. Conversely, if $\gamma = 1$, then the agent values all future rewards equal to the immediate reward \cite{RL}.
-
+Where $\gamma \in [0,1]$ is the \textit{discount-factor}\footnote{ The discount factor $\gamma$ serves to model scenarios in which a future reward is considered less desirable than an immediate reward of the same magnitude.}.
+The return is a scalar-value that essentially summarizes a (possibly) infinite sequence of immediate rewards. 
+An important fact to note is that even though this is an infinite sum, if $\gamma < 1$, $G_t$ will be finite, as long as $\{R_k\}$ is bounded \cite{RL}. If we set the value of $\gamma$ to $0$, the agent will only consider immediate reward, and future rewards will be of no consequence. Conversely, as  $\gamma \to 1$, the agent values future rewards more strongly \cite{RL}. The return $G_t$ for a given time step $t$ can be expressed recursively as:
+\begin{align}
+    G_t &= R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \gamma^3 R_{t+4} + \cdots  \nonumber \\
+    &= R_{t+1} + \gamma (R_{t+2} + \gamma R_{t+3} + \gamma^2 R_{t+4} + \cdots) \nonumber \\
+    &= R_{t+1} + \gamma G_{t+1} \label{return}
+\end{align}
+By breaking down the computation of expected returns into smaller, incremental steps, the recursive property enables efficient updating of value estimates during the learning process. This is particularly useful in temporal difference learning methods, such as Q-learning and SARSA, where the value function is updated incrementally after each transition. This recursive property allows RL algorithms to leverage current estimates of future returns, $G_{t+1}$, to improve the current value estimate $G_t$. This process, known as bootstrapping, helps algorithms converge faster by taking advantage of information already available, rather than waiting to accumulate the complete return through the end of an episode. We will delve deeper into this idea in Section \ref{Algo}, where we explore Temporal Difference learning and Q-learning.
 
 \subsection{Value and State-Value Functions}
 
@@ -90,18 +95,17 @@ Now we can define the notion of ``value of a state" formally via \vocab{value fu
         \item finite horizon: $V^{\pi}(s) = \underset{a_t \sim \pi(s_t)}{\EE} \left[ \sum_{t=0}^T r(s_t,a_t) \mid S_t =s
         \right]$ \cite{mohri2018}
         \item infinite discounted horizon: $V^{\pi}(S_t = s) = \underset{a_t \sim \pi(s_t)}{\EE} \left[ \sum_{t=0}^{+ \infty} \gamma^t r(s_t,a_t) \mid S_t =s
-        \right]$ \cite{mohri2018}
-    \end{itemize}
-    \footnote{Technically the notation should be: $\EE_{a_t \sim \pi(s_t)} \EE_{s_t}$ since
+        \right]$ \cite{mohri2018}     \footnote{Technically the notation should be: $\EE_{a_t \sim \pi(s_t)} \EE_{s_t}$ since
     we are not just taking the expectation over the random selection of an action $a_t$ according to the distribution $\pi(s_t)$, but we are also taking the expectation over the states $s_t$ reached and the corresponding reward values $r(s_t, a_t)$. However, in RL literature/textbooks the randomization with respect to the next state and reward function doesn't seem to be  explicitly mentioned (to simplify notation perhaps)} 
+    \end{itemize}
 \end{definition}
-An intuitive way of understanding Value Function is that it tells us how much ``accumulated future reward'' we expect to obtain from a given state .
+An intuitive way of understanding Value Function is that it tells us how much ``accumulated future reward'' we expect to obtain from a given state.
 
 Starting from a state $s \in S$, to maximize reward, an agent naturally seeks a policy $\pi$ with the largest value $V_{\pi}(s)$. A remarkable result for finite MDPs in the finite horizon case, there exists an \textit{optimal policy} for all starting states $s \in S$. Formally, a policy $\pi^*$ is optimal if for any policy $\pi$ and any state $s \in S$, $V^{\pi^*}(s) \geq  V^{\pi}(s)$. 
 We can prove that this optimal policy $\pi^*$ is deterministic \cite{mohri2018}, and this proof can be found in Mohri  et al. (2018). 
 \\\
 \\
-\textbf{Action value function} ($Q^{\pi}$): Represents the expected cumulative reward an agent can obtain by taking an action a in a given state s and following a certain policy $\pi$ thereafter. 
+\textbf{Action-Value Function} ($Q^{\pi}$): Represents the expected cumulative reward an agent can obtain by taking an action $a$ in a given state $s$ and following a certain policy $\pi$ thereafter. 
 
 \begin{definition}[State-action value function]
     The state-action value function $Q$ associated to a policy $\pi$ is defined for all $(s,a) \in S \times A$ as the expected return for taking action $a \in A$ at state $s \in S$ and then following policy $\pi$:
@@ -116,26 +120,24 @@ The motivation behind using value functions in RL is to guide the agents decisio
 Value functions $V^{\pi}$ and $Q^{\pi}$ can be estimated through experience. For instance, if an agent follows policy $\pi$ and maintains an average for each state encountered, based on the actual returns following that state, these averages will converge to $V^{\pi}(s)$ for all $s \in S$ as the number of times the state is encountered approaches infinity.
 By keeping separate averages for each action taken in each state, these averages will converge to the action-values $Q^{\pi}(s,a)$. Such estimation methods are referred to as \textbf{Monte Carlo methods} because they involve averaging over numerous samples of actual returns.
 \subsection{The Bellman Equations}
-The Bellman equation is a fundamental equation in reinforcement learning and in dynamic programming\cite{bellman1958}. There are two forms of Bellman equation: (1) Bellman Expectation Equation and (2) Bellman Optimally Equation. 
-Both equations expresses the relationship between the value of a state and values of successor states. 
-\note{In simple terms, the Bellman Equation decomposes the value function into immediate reward from taking an action in the current state plus the discounted expected value of future states, while taking into account all future possible actions.}
-\vocab{Bellman Expectation Equation} is used to calculate the used to compute the value function $V^\pi(s)$ for a given policy $\pi$.
+Value functions in reinforcement learning exhibit recursive relationships, like the one established for the return in equation (\ref{return}). For every policy $\pi$ and state $s$, this recursive relationship exists that links the value of $s$ to the values of its potential subsequent states \cite{RL}:
 \begin{align*}
     V^{\pi}(s) &= \EE_{\pi}[G_t \mid S_t =s] \\
     &= \EE_{\pi}[R_{t+1} + \gamma G_{t+1} \mid S_t =s] \\
     &= \sum_{a \in A} \pi(a\mid s) \sum_{s'} \sum_{r} \PP(s',r \mid s,a) [r + \gamma \term{$\EE_{\pi} (G_{t+1} \mid S_{t+1} = s')$} ] \\
     &=\sum_{a \in A} \pi(a\mid s) \sum_{s'} \sum_{r} \PP(s',r \mid s,a) [r + \gamma \term{$V^{\pi}(s')$} ], \quad \forall s \in S
 \end{align*}
-Think of looking ahead from a state to its successor state(s). 
-The Bellman equation tells us that the value of any state must be equal to the expected reward received form being being in that state plus the (discounted) value of the expected next state.
+The equation represents a recursive formulation of the value function, and this is known as the \vocab{Bellman Expectation Equation} \cite{RL}, \cite{RL2}, \cite{bellman1958}.
+The Bellman equation is a fundamental equation in reinforcement learning and in dynamic programming. 
+\note{In simple terms, the Bellman Equation decomposes the value function into immediate reward from taking an action in the current state plus the discounted expected value of future states, while taking into account all future possible actions.}
+The Bellman equation tells us that the value of any state must be equal to the expected reward received from being in that state plus the (discounted) value of the expected next state.
 Another more compact way to express the Bellman equation commonly found in the literature is: 
-\begin{equation}
+\begin{equation}\label{Bell1}
     V^{\pi}(s) = \sum_{a \in \SA(s)} \pi(a|s) \cdot \sum_{s'} \SP_{s,s'}^{a} [r(s,a) + \gamma V^{\pi}(s')]
 \end{equation}
-The equation is allowing us to compute the value of state $s$ if we follow an arbitrary policy  $\pi$. In the equation above $r(s,a)$ is the immediate reward. 
-The equation states that the value of a given state, $V^{\pi}(s)$ under $\pi$, is equal to the immediate reward $r(s,a)$ plus discounted value of the next state $\gamma V^{\pi}(s')$. Recall that $V^{\pi}(s')$ is also an expectation, and therefore, it is considering all possible actions and transitions to the next state , weighted by their probabilities $\SP_{s,s'}^{a} = \PP(s' \mid s,a)$.
+The equation states that the value of a given state, $V^{\pi}(s)$ under $\pi$, is equal to the immediate reward $r(s,a)$ plus discounted value of the next state $\gamma V^{\pi}(s')$. Recall that $V^{\pi}(s')$ is also an expectation, and therefore, it is considering all possible actions and transitions to the next state, weighted by their probabilities $\SP_{s,s'}^{a} = \PP(s' \mid s,a)$.
 \\
-\vocab{Bellman Equation for Action-Value Function} can be expressed in the same way:
+Bellman Equation for Action-Value Function can be expressed in the same way:
 \begin{align}
     Q^{\pi}(s,a) &= \SP_{s,s'}^{a} [ r(s,a) + \gamma \overbrace{\sum_{a'} \pi(a'|s') Q^{\pi}(s',a')}^{V^{\pi}(s)}] \\
     &= \SP_{s,s'}^{a} [ r(s,a) + \gamma V^{\pi}(s)]
@@ -145,25 +147,30 @@ $$
 V^{\pi}(s) = \sum_{a \in \SA(s)} \pi(a \mid s) Q^{\pi}(s,a)
 $$
 \subsection{Finding Optimal Policies}
-Value functions allow us to create a hierarchical structure among policies, where a policy $\pi$ is deemed superior or equal to another policy $\pi'$ if it yields an expected return that is greater than or equal to that of $\pi'$ across all states\cite{RL2}. Thus, $\pi \geq \pi'$ if and only if the condition $V_\pi(s) \geq V_{\pi'}(s)$ holds true for every state $s \in S$ \cite{mohri2018}. For finite MDPs, there is always at least one policy that is better than or equal to all other policies \cite{RL}. This is what we call the \textit{optimal policy}. Although there might be more than one, we denote all the optimal policies by $\pi^*$. The optimal policies share the same state-value function and the action-value functions which we denote as $V^{*}$ and $Q^{*}$\cite{RL2}.
+Value functions allow us to create a hierarchical structure among policies, where a policy $\pi$ is deemed superior or equal to another policy $\pi'$ if it yields an expected return that is greater than or equal to that of $\pi'$ across all states \cite{RL2}. Thus, $\pi \geq \pi'$ if and only if the condition $V_\pi(s) \geq V_{\pi'}(s)$ holds true for every state $s \in S$ \cite{mohri2018}. For finite MDPs, there is always at least one policy that is better than or equal to all other policies \cite{RL}. This is what we call the \textit{optimal policy}. Although there might be more than one, we denote all the optimal policies by $\pi^*$. The optimal policies share the same state-value function and the action-value functions which we denote as $V^{*}$ and $Q^{*}$\cite{RL2}.
 \begin{align*}
     V^{*}(s) = \underset{\pi}{\text{max }} V^{\pi}(s), \quad  \forall s \in S, a \in A \\ 
     Q^{*}(s) = \underset{\pi}{\text{max }} Q^{\pi}(s), \quad  \forall s \in S, \forall a \in A
 \end{align*}
+\note{
 A useful fact which will be leveraging is that we can express $Q^*$ in terms of $V^*$:
 \begin{align*}
     Q^*(s,a) &= \EE [R_{t+1} + \gamma V^*(S_{t+1}) \mid S_t = s, A_t =a ] \\ 
     &= \EE [R_{t+1}]  + \gamma \sum_{ s' \in \cS} \PP[S_{t+1} =s'|S_t = s, A_t = a] V^*(S_{t+1})   
 \end{align*}
 Note that $R_{t+1}$ is a random varible since we don't know what future state $s'$ we will end up in, therefore, 
-we are taking the expectation $\EE [R_{t+1}]$ over the dynamics of transition probabilities of the next state $s'$ we reach. 
-\\
-\vocab{Bellman Optimality Equation:} This equation is expresses that ``the value of  state under \textit{optimal policy} must be equal to the expected for the best action from that that state"\cite{RL}, and
+we are taking the expectation $\EE [R_{t+1}]$ over the dynamics of transition probabilities of the next state $s'$ we reach.}
+Recall that all value functions $v(s)$, must satisfy the recursive/self-consistency property established in (\ref{Bell1}). This mean we can express $V^*$ in a similar fashion. We write $V^*$ without  reference to any specific policy because it is the optimal value function. We follow a similar derivation which can be found in \cite{RL}, \cite{Markov}, \cite{RL2}, \cite{mohri2018}:
+\begin{align}
+    V^*(s) &= \underset{a \in A}{\text{max }} Q^{\pi}(s), \quad  \forall s \in S  \nonumber \\   
+    &= \max_{a} \mathbb{E}_{\pi^*}[G_t \mid S_t = s, A_t = a] \nonumber \\
+    &= \max_{a} \mathbb{E}_{\pi^*}[R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a] \nonumber \\
+    &= \max_{a}  \mathbb{E}_{\pi^*}[R_{t+1} + \gamma V^*(S_{t+1}) \mid S_t = s, A_t = a] \nonumber \\
+    &= \max_{a} \sum_{s'} \sum_{r} \PP(s',r \mid s,a) [r + \gamma V^{*}(s') ], \quad \forall s \in S 
+\end{align}
+This is known as the \vocab{Bellman Optimality Equation}. The equation expresses that ``the value of  state under \textit{optimal policy} must be equal to the expected for the best action from that state" \cite{RL}, and
 is used to compute the optimal value function which is usually denoted as $V^*(s)$ in literature.
-\begin{align*}
-    V^*(s) = \underset{a \in A}{\text{max }} Q^{\pi}(s), \quad  \forall s \in S 
-\end{align*}
-The Bellman optimally equation for $Q^*(s,a)$ is 
+The Bellman optimally equation for $Q^*(s,a)$ is:
 \begin{align*}
     Q^{*}(s,a) &= \EE \left [R_{t+1}
     + \gamma \underset{a}{\text{max}}Q^*(S_{t+1},a')  \mid S_{t} =s, A_t = a \right] \\
@@ -171,25 +178,12 @@ The Bellman optimally equation for $Q^*(s,a)$ is
     \left [r + \gamma \underset{a}{\text{max}}Q^*(S_{t+1},a') 
     \right]
 \end{align*}
-
-
+\textbf{Why are $Q^*$ and $V^*$ important?}
 \begin{itemize}
-    \item $V^*(s)$: once we have $V^*$ it is relatively easy to determine the optimal policy (we are working backwards here, we started off defining the $V$ function for specific policies, but now we are using the $V^*$ to find the policy). The beauty of $V^*$ is that it makes the greedy policy the optimal policy in the long-term sense because $V^*$ is taking into account the reward consequences all possible future behaviour. By means of $V^*$, the optimal expected long-term return is turned into a quantity that is locally and immediately available for each state.
-    
-    \item $Q^*(s,a)$: Having $Q^*$ makes choosing optimal actions easier, with $Q^*$ the agent does even have to do one-step ahead search. Given any state $s \in S$, it can simply find any action that maximizes $Q^*(s,a)$. The action value function caches the result of one-step-ahead searches. It provides the expected long-term return as a value that is locally and and immediately available for each action-pair.
+    \item $V^*(s)$: When we have $V^*$, determining the optimal policy becomes easy. The beauty of $V^*$ lies in its ability to transform the greedy policy into the optimal policy in terms of long-term rewards \cite{RL}, as it takes into account the reward consequences of all possible future behaviors. Through $V^*$, the optimal expected long-term return is converted into a value that is readily and locally accessible for each state, allowing for more efficient decision-making \cite{RL}.
+     
+    \item $Q^*(s,a)$: With $Q^*$ at hand, the agent can bypass one-step ahead search. For any state $s \in S$, it can directly identify the action(s) that maximizes $Q^*(s,a)$. The action-value function serves as a cache for the results of one-step-ahead searches \cite{RL}, offering the expected long-term return as a value that is both locally and instantly accessible for each state-action pair.
 \end{itemize}
 
-
-
-
-
-\subsection{GPI}
-When we don't have a model, we don't have access to the environment's dynamics such as transition probabilities ($\PP(S_{t+1} \mid S_t , A_t)$) or rewards functions $r(s_{t+1}, a_t, s_t)$ (reward for taking action $a_t$ in state $s_t$ and transitioning state $s_{t+1}$). Consequently, we cannot predict the next state and the immediate reward you will receive when taking a specific action in a given state. 
-
-In \vocab{Generalized Policy iteration (GPI)} one maintains both an approximate policy and an approximate value function. The value function is continually altered to obtain a more accurate approximation of the value function, and the policy is repeatedly improved with respect to the current valuye function. 
- 
-
-On-policy methods attempt to evaluate or improve the policy that is used to make decisions, whereas off policy methods evaluate or improve a policy different from that used to generate the data. 
-In on-policy control methods rthe policy is generally soft, meaning that $\pi(a \mid s) > 0$ for all $s \in S$ and $a \in A(s)$, but gradually shifted closer and closer to a deterministic optimal policy. 
 
 
